@@ -26,15 +26,7 @@ A professional Chrome Extension that uses the blazing-fast Groq AI API to genera
 
 You can install this extension in two ways: via the Chrome Web Store (recommended for most users) or by loading it manually (for developers).
 
-### Method 1: Install from Chrome Web Store (Coming Soon!)
-
-*(Once your extension is published, you can add the link here.)*
-
-1.  Go to the [LinkedIn AI Comment Generator page on the Chrome Web Store]().
-2.  Click "Add to Chrome".
-3.  The extension will be installed and ready to configure.
-
-### Method 2: Manual Installation (For Developers)
+### Method 1: Manual Installation (For Developers)
 
 Follow these steps to get the extension up and running on your local machine.
 
