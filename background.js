@@ -1,6 +1,5 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "generateComment") {
-        // API key සහ custom prompt දෙකම storage එකෙන් ගන්නවා
         chrome.storage.sync.get(['groqApiKey', 'customPrompt'], async (result) => {
             const apiKey = result.groqApiKey;
             if (!apiKey) {
@@ -12,7 +11,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             
             const DEFAULT_PROMPT = `Generate three insightful and engaging comments for the following LinkedIn post. Each comment should be positive, professional, and encourage conversation. Respond with ONLY a valid JSON object in the format: { "comments": ["comment 1", "comment 2", "comment 3"] }. Do not include any other text or markdown. The post is:\n\n---\n\n`;
 
-            // User ගේ custom prompt එකක් තියෙනවද බලනවා, නැත්නම් default එක පාවිච්චි කරනවා
             const userPrompt = result.customPrompt || DEFAULT_PROMPT;
             const finalPrompt = userPrompt + request.postText;
 
