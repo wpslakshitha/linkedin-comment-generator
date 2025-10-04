@@ -3,7 +3,7 @@
 A professional Chrome Extension that uses the blazing-fast Groq AI API to generate insightful and engaging comments for LinkedIn posts. This advanced tool helps you build your professional brand and engage with your network more efficiently by providing relevant, customizable comment suggestions with a single click.
 
 <!-- TODO: Add a GIF or screenshot of the extension in action. A short screen recording converted to a GIF is highly recommended. -->
-![Demo Screenshot](https://via.placeholder.com/800x450.png?text=Add+a+Screenshot+or+GIF+of+the+Extension)
+![Extension Demo](https://github.com/wpslakshitha/linkedin-comment-generator/blob/main/images/demo.gif?raw=true)
 
 ## ✨ Features
 
