@@ -1,0 +1,61 @@
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "generateComment") {
+        // API key සහ custom prompt දෙකම storage එකෙන් ගන්නවා
+        chrome.storage.sync.get(['groqApiKey', 'customPrompt'], async (result) => {
+            const apiKey = result.groqApiKey;
+            if (!apiKey) {
+                sendResponse({ error: "Groq API Key not found. Please set it in the extension popup." });
+                return true;
+            }
+
+            const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+            
+            const DEFAULT_PROMPT = `Generate three insightful and engaging comments for the following LinkedIn post. Each comment should be positive, professional, and encourage conversation. Respond with ONLY a valid JSON object in the format: { "comments": ["comment 1", "comment 2", "comment 3"] }. Do not include any other text or markdown. The post is:\n\n---\n\n`;
+
+            // User ගේ custom prompt එකක් තියෙනවද බලනවා, නැත්නම් default එක පාවිච්චි කරනවා
+            const userPrompt = result.customPrompt || DEFAULT_PROMPT;
+            const finalPrompt = userPrompt + request.postText;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'llama-3.1-8b-instant', 
+                        messages: [
+                            { 
+                                role: 'user', 
+                                content: finalPrompt 
+                            }
+                        ],
+                        response_format: { type: "json_object" }
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const errorDetails = data?.error?.message || JSON.stringify(data);
+                    throw new Error(`API Error: ${errorDetails}`);
+                }
+                
+                const responseContent = JSON.parse(data.choices[0].message.content);
+                const comments = responseContent.comments;
+
+                if (!comments || !Array.isArray(comments) || comments.length === 0) {
+                    throw new Error("API returned an unexpected format.");
+                }
+
+                sendResponse({ comments: comments });
+
+            } catch (error) {
+                console.error("Error calling Groq API:", error);
+                sendResponse({ error: error.message });
+            }
+        });
+        return true; 
+    }
+});
